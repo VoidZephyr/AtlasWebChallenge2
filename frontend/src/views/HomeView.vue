@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import apiClient from '../services/api';
+import { fetchItems } from '/src/services/api.ts';
+;
 
 export default {
     data() {
