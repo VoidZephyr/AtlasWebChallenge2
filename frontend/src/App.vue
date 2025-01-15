@@ -1,9 +1,8 @@
 <template>
   <div id="app">
     <h1>Welcome to My Website</h1>
-    <router-view />
     <div>
-      <FilterChips :filters="filters" @filter-changed="currentFilter = $event"/>
+      <FilterChips :filters="filters" @filter-changed="fetchFilteredItems"/>
       <p>Selected Filter: {{ currentFilter }}</p>
     </div>
   </div>
@@ -11,6 +10,7 @@
 
 <script lang="ts">
 import FilterChips from '/root/AtlasWebChallenge2/frontend/src/FilterChips.vue';
+import {fetchItems} from '/root/AtlasWebChallenge2/frontend/src/services/api.js'
 
 export default {
   name: 'App',
@@ -21,7 +21,17 @@ export default {
     return {
       filters: ["ALL", "Acquisition", "Communication", "Engineering", "Education", "Productivity", "Training", "Workplace"],
       currentFilter: "ALL",
+      items: [],
     };
+  },
+  methods:{
+    async fetchFilteredItems(filter: string) {
+      this.currentFilter = filter;
+      this.items = await fetchItems(filter);
+    },
+  },
+  async mounted() {
+    this.items = await fetchItems('ALL');
   },
 };
 </script>

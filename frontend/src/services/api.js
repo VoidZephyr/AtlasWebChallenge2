@@ -7,4 +7,9 @@ const apiClient = axios.create({
     },
 });
 
-export default apiClient;
+export const fetchItems = async (filter: string) => {
+    const response = await apiClient.get('/items', {
+    params: { filter },
+    });
+    return response.data;
+};
