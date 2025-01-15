@@ -1,14 +1,21 @@
 <template>
   <div id="app">
     <h1>Welcome to My Website</h1>
-    <p>This is the starting point of our website!</p>
     <router-view />
+    <div>
+      <FilterChips />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import FilterChips from '/src/FilterChips.vue';
+
 export default {
   name: 'App',
+  components:{
+    FilterChips,
+  }
 };
 </script>
 
