@@ -2,11 +2,11 @@
   <div id="app">
     <h1>Welcome to My Website</h1>
     <div>
-      <FilterChips :filters="filters" @filter-changed="fetchFilteredItems" />
+      <FilterChips :filters="filters" @filter-changed="fetchFilteredArticles" />
       <p>Selected Filter: {{ currentFilter }}</p>
       <h2>Items List</h2>
       <ul>
-        <li v-for="item in items" :key="item.id">{{ item.name }}</li>
+        <li v-for="article in articles" :key="article.id">{{ article.title }} ({{ article.category }})</li>
       </ul>
     </div>
   </div>
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import FilterChips from '/root/AtlasWebChallenge2/frontend/src/FilterChips.vue';
-import { fetchItems } from '/src/services/api.ts';
+import { fetchArticles } from '/src/services/api.ts';
 
 
 export default {
@@ -26,20 +26,20 @@ export default {
     return {
       filters: ["ALL", "Acquisition", "Communication", "Engineering", "Education", "Productivity", "Training", "Workplace"],
       currentFilter: "ALL",
-      items: [],
+      articles: [],
     };
   },
   methods: {
-    async fetchFilteredItems(filter: string) {
+    async fetchFilteredArticles(filter: string) {
       this.currentFilter = filter;
-      this.items = await fetchItems(filter);
+      this.articles = await fetchArticles(filter);
     },
-    async loadItems() {
-      this.items = await fetchItems('ALL');
+    async loadArticles() {
+      this.articles = await fetchArticles('ALL');
     },
   },
   mounted() {
-    this.loadItems();
+    this.loadArticles();
   },
 };
 </script>
