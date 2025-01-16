@@ -17,14 +17,23 @@
 
 <script lang="ts">
 import FilterChips from '/src/FilterChips.vue';
-import { fetchArticles } from './services/api';
+import { fetchArticles, saveBookmarks, loadBookmarks } from './services/api';
 
 export default {
   name: 'App',
   components: { FilterChips },
   data() {
     return {
-      filters: ["ALL", "Acquisition", "Communication", "Engineering", "Education", "Productivity", "Training", "Workplace"],
+      filters: [
+        "ALL",
+        "Acquisition",
+        "Communication",
+        "Engineering",
+        "Education",
+        "Productivity",
+        "Training",
+        "Workplace",
+      ],
       currentFilter: "ALL",
       articles: [],
     };
@@ -33,16 +42,33 @@ export default {
     async fetchFilteredArticles(filter: string) {
       this.currentFilter = filter;
       this.articles = await fetchArticles(filter);
+      this.loadBookmarks();
     },
     async loadArticles() {
-      this.articles = await fetchArticles('ALL');
+      this.articles = await fetchArticles("ALL");
+    },
+    async saveBookmarks() {
+      const bookmarkedArticles = this.articles.filter(
+        (article) => article.bookmarked
+      );
+      await saveBookmarks(bookmarkedArticles);
+    },
+    async loadBookmarks() {
+      const savedBookmarks = await loadBookmarks();
+      this.articles.forEach((article) => {
+        article.bookmarked = savedBookmarks.some(
+          (saved) => saved.id === article.id
+        );
+      });
     },
     toggleBookmark(article) {
       article.bookmarked = !article.bookmarked;
+      this.saveBookmarks();
     },
   },
-  mounted() {
-    this.loadArticles();
+  async mounted() {
+    await this.loadArticles();
+    await this.loadBookmarks();
   },
 };
 </script>

@@ -6,8 +6,8 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/api/articles', (req, res) => {
-  const { category } = req.query;
-  const articles = [
+const { category } = req.query;
+const articles = [
     { id: 1, name: 'Article 1', category: 'Acquisition', bookmarked: false },
     { id: 2, name: 'Article 2', category: 'Communication', bookmarked: false },
     { id: 3, name: 'Article 3', category: 'Engineering', bookmarked: false },
@@ -16,16 +16,27 @@ app.get('/api/articles', (req, res) => {
     { id: 6, name: 'Article 6', category: 'Training', bookmarked: false },
     { id: 7, name: 'Article 7', category: 'Workplace', bookmarked: false },
     { id: 8, name: 'Article 8', category: 'ALL', bookmarked: false },
-  ];
+];
 
-  const filteredArticles =
+const filteredArticles =
     category && category !== "ALL"
-      ? articles.filter((article) => article.category === category)
-      : articles;
+    ? articles.filter((article) => article.category === category)
+    : articles;
 
-  res.json(filteredArticles);
+res.json(filteredArticles);
 });
 
+let bookmarks = [];
+
+app.post('/api/bookmarks', (req, res) => {
+bookmarks = req.body;
+res.json({ message: 'Bookmarks saved successfully!' });
+});
+app.get('/api/bookmarks', (req, res) => {
+res.json(bookmarks);
+});
+
+
 app.listen(3000, () => {
-  console.log('Backend running on http://localhost:3000');
+console.log('Backend running on http://localhost:3000');
 });
