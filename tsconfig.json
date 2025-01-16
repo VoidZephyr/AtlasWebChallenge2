@@ -1,0 +1,13 @@
+// All the ts config files honestly  don't have much important.
+// They let VSCode know how to parse the types.
+{
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		},
+		{
+			"path": "./tsconfig.app.json"
+		}
+	]
+}
