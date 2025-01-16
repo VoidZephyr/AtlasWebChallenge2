@@ -1,27 +1,27 @@
 <template>
   <div id="app">
     <h1>Welcome to My Website</h1>
-    <div>
-      <FilterChips :filters="filters" @filter-changed="fetchFilteredArticles" />
-      <p>Selected Filter: {{ currentFilter }}</p>
-      <h2>Items List</h2>
-      <ul>
-        <li v-for="article in articles" :key="article.id">{{ article.title }} ({{ article.category }})</li>
-      </ul>
-    </div>
+    <FilterChips :filters="filters" @filter-changed="fetchFilteredArticles" />
+    <p>Selected Filter: {{ currentFilter }}</p>
+    <h2>Items List</h2>
+    <ul>
+      <li v-for="article in articles" :key="article.id">
+        {{ article.name }} ({{ article.category }})
+        <button @click="toggleBookmark(article)">
+          {{ article.bookmarked ? 'Unbookmark' : 'Bookmark' }}
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script lang="ts">
-import FilterChips from '/root/AtlasWebChallenge2/frontend/src/FilterChips.vue';
-import { fetchArticles } from '/src/services/api.ts';
-
+import FilterChips from '/src/FilterChips.vue';
+import { fetchArticles } from './services/api';
 
 export default {
   name: 'App',
-  components: {
-    FilterChips,
-  },
+  components: { FilterChips },
   data() {
     return {
       filters: ["ALL", "Acquisition", "Communication", "Engineering", "Education", "Productivity", "Training", "Workplace"],
@@ -36,6 +36,9 @@ export default {
     },
     async loadArticles() {
       this.articles = await fetchArticles('ALL');
+    },
+    toggleBookmark(article) {
+      article.bookmarked = !article.bookmarked;
     },
   },
   mounted() {
